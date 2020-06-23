@@ -3,7 +3,7 @@ EXTERNAL_HOST = "External"
 
 # Translation
 ConnectionIssueWith = "Connection issue with"
-LocalConnectionIsNotWorking: "Local connection is not working!"
+LocalConnectionIsNotWorking = "Local connection is not working!"
 
 
 def translate(text, lang="pl"):
