@@ -59,7 +59,7 @@ def check_connection(hosts_config):
         for external_host in external_hosts:
             if not ping(external_host["address"]):
                 make_response_invalid(
-                    f"{translate(constants.ConnectionIssueWith) [{external_host['name']}]}"
+                    f"{translate(constants.ConnectionIssueWith)} [{external_host['name']}]"
                 )
 
     check_local_connection()
