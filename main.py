@@ -82,9 +82,11 @@ def main():
     result = check_connection(config.hosts)
 
     if not result["valid"]:
-        notifier(f"[{today()}] {result['error_msg']}")
-
-    log(f"Connection test finished successfully at {today()}")
+        msg = "[{today()}] {result['error_msg']}"
+        log(msg)
+        notifier(msg)
+    else:
+        log(f"Connection test finished successfully at {today()}")
 
 
 if __name__ == '__main__':
