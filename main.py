@@ -87,7 +87,7 @@ def main():
     result = check_connection(config.hosts)
 
     if not result["valid"]:
-        msg = "[{today()}] {result['error_msg']}"
+        msg = f"[{today()}] {result['error_msg']}"
         log(msg)
         if result["error_source_type"] == constants.EXTERNAL_HOST:
             notifier(msg)
