@@ -25,18 +25,21 @@ def ping(host):
 def check_connection(hosts_config):
     """
         Returns dict with keys:
-            1. valid        -> bool
-            2. error_msg    -> str
+            1. valid                -> bool
+            2. error_msg            -> str
+            3. error_source_type    -> str (Local/External)
     """
 
     response = {
         "valid": True,
-        "error_msg": None
+        "error_msg": None,
+        "error_source_type": None
     }
 
-    def make_response_invalid(error_msg):
+    def make_response_invalid(error_msg, error_source_type):
         response["valid"] = False
         response["error_msg"] = error_msg
+        response["error_source_type"] = error_source_type
 
     def check_local_connection():
         local_hosts = filter(
@@ -47,7 +50,8 @@ def check_connection(hosts_config):
         for local_host in local_hosts:
             if not ping(local_host["address"]):
                 make_response_invalid(
-                    constants.LocalConnectionIsNotWorking)
+                    constants.LocalConnectionIsNotWorking,
+                    constants.LOCAL_HOST)
                 return
 
     def check_external_connection():
@@ -59,7 +63,8 @@ def check_connection(hosts_config):
         for external_host in external_hosts:
             if not ping(external_host["address"]):
                 make_response_invalid(
-                    f"{translate(constants.ConnectionIssueWith)} [{external_host['name']}]"
+                    f"{translate(constants.ConnectionIssueWith)} [{external_host['name']}]",
+                    constants.EXTERNAL_HOST
                 )
 
     check_local_connection()
@@ -84,7 +89,8 @@ def main():
     if not result["valid"]:
         msg = "[{today()}] {result['error_msg']}"
         log(msg)
-        notifier(msg)
+        if result["error_source_type"] == constants.EXTERNAL_HOST:
+            notifier(msg)
     else:
         log(f"Connection test finished successfully at {today()}")
 
