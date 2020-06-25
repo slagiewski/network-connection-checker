@@ -59,9 +59,13 @@ def check_connection(hosts_config):
             lambda host: host.get("type", "") == constants.EXTERNAL_HOST,
             hosts_config
         )
-
+        num_of_tries = 3
+        num_of_failures = 0
         for external_host in external_hosts:
-            if not ping(external_host["address"]):
+            for _ in range(num_of_tries):
+                if not ping(external_host["address"]):
+                    num_of_failures += 1
+            if num_of_failures == num_of_tries:
                 make_response_invalid(
                     f"{translate(constants.ConnectionIssueWith)} [{external_host['name']}]",
                     constants.EXTERNAL_HOST
